@@ -3,4 +3,4 @@ The collection of data is from the Kaggle website which involves log files and w
 data encoding and further web mining-based feature extraction is performed
 then the extracted features are clustered via the spectral clustering
 model. Finally, various learning styles are predicted using the
-Quadratic SVM model. Python platform executes the implementation with an accuracy of 95.45%.
+Quadratic SVM model. Python platform executes the implementation with an accuracy of 95.45%
