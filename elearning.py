@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.cluster import SpectralClustering
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
@@ -13,11 +13,11 @@ data = pd.read_csv('Dataset.csv',index_col=0)
 
 # Pattern Identification (Add a column based on total_posts, timeonline, and post types)
 def identify_learning_pattern(row):
-    if row['helpful_post'] > 10 and row['nice_code_post'] > 5:
+    if row['helpful_post'] > 5 and row['nice_code_post'] > 8:
         return 'Collaborative'
-    elif row['creative_post'] > 5 and row['amazing_post'] > 3:
+    elif row['creative_post'] > 18 and row['amazing_post'] > 19:
         return 'Creative'
-    elif row['confused_post'] > 5 or row['bad_post'] > 3:
+    elif row['confused_post'] > 0 or row['bad_post'] > 0:
         return 'Confused'
     else:
         return 'Neutral'
@@ -29,7 +29,7 @@ data['learning_pattern'] = data.apply(identify_learning_pattern, axis=1)
 data.replace(',', '.', regex = True, inplace = True)
 
 # Data Preprocessing
-X = data.drop(['Approved', 'learning_pattern'], axis=1)  # Features (excluding 'Approved' and 'learning_pattern')
+X = data.drop(['Approved', 'learning_pattern'], axis=1)  # Creating Feature Matrix(excluding 'Approved' and 'learning_pattern')
 y = data['Approved']
 
 # Standardizing the features
@@ -39,7 +39,6 @@ X_scaled = scaler.fit_transform(X)
 # Checking for missing values
 data.isnull().sum()
 
-from sklearn.preprocessing import StandardScaler, LabelEncoder
 
 # Checking for any remaining non-numeric columns and removing them
 data = data.select_dtypes(include=[np.number])
@@ -50,6 +49,7 @@ scaler = StandardScaler()
 data_scaled = scaler.fit_transform(data.drop(['Approved'], axis=1))
 
 # Quadratic Support Vector Machine (SVM)
+# 70% of the data used for training and 30% for testing
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, random_state=7)
 
 # Training the Quadratic SVM model (Polynomial kernel with degree=2)
